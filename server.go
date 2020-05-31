@@ -1,3 +1,10 @@
+/*
+ * @Description:
+ * @Author: chunhua.yang
+ * @Date: 2020-05-29 12:06:33
+ * @LastEditors: chunhua.yang
+ * @LastEditTime: 2020-05-31 00:10:37
+ */
 package gonginx
 
 import (
@@ -33,4 +40,15 @@ func (s *Server) GetParameters() []string {
 //GetBlock get block if any
 func (s *Server) GetBlock() IBlock {
 	return s.Block
+}
+
+func (s *Server) GetDirective() *Directive {
+	//First, generate a new directive from upstream server
+	directive := &Directive{
+		Name:       "server",
+		Parameters: make([]string, 0),
+		Block:      s.Block,
+	}
+
+	return directive
 }
