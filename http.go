@@ -3,7 +3,7 @@
  * @Author: chunhua.yang
  * @Date: 2020-05-29 12:06:33
  * @LastEditors: chunhua.yang
- * @LastEditTime: 2020-05-31 00:05:08
+ * @LastEditTime: 2020-05-31 00:25:50
  */
 package gonginx
 
@@ -34,7 +34,8 @@ func NewHttp(directive IDirective) (*Http, error) {
 	if len(directive.GetBlock().GetDirectives()) > 0 {
 		for _, d := range directive.GetBlock().GetDirectives() {
 			if d.GetName() == "server" {
-				http.Servers = append(http.Servers, NewServer(d))
+				s, _ := NewServer(d)
+				http.Servers = append(http.Servers,s)
 			}
 		}
 	}
@@ -42,7 +43,7 @@ func NewHttp(directive IDirective) (*Http, error) {
 	// return &Http{
 	// 	Block: block,
 	// }, nil
-	return http,nil;
+	return http, nil
 
 }
 
