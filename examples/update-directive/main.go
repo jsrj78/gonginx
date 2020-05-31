@@ -1,10 +1,17 @@
+/*
+ * @Description: 
+ * @Author: chunhua.yang
+ * @Date: 2020-05-29 12:06:33
+ * @LastEditors: chunhua.yang
+ * @LastEditTime: 2020-05-30 23:43:01
+ */ 
 package main
 
 import (
 	"fmt"
 
-	"github.com/tufanbarisyildirim/gonginx"
-	"github.com/tufanbarisyildirim/gonginx/parser"
+	"github.com/jsrj78/gonginx"
+	"github.com/jsrj78/gonginx/parser"
 )
 
 func main() {
