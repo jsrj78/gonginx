@@ -1,8 +1,21 @@
+/*
+ * @Description:
+ * @Author: chunhua.yang
+ * @Date: 2020-05-31 10:32:30
+ * @LastEditors: chunhua.yang
+ * @LastEditTime: 2020-05-31 16:41:05
+ */
 package gonginx
 
 //Block a block statement
 type Block struct {
 	Directives []IDirective
+}
+
+//GetDirectives get all directives in this block
+func (b *Block) SetDirectives(directive []IDirective) []IDirective {
+	b.Directives = append(b.Directives, directive...)
+	return b.Directives
 }
 
 //GetDirectives get all directives in this block

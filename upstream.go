@@ -1,3 +1,10 @@
+/*
+ * @Description:
+ * @Author: chunhua.yang
+ * @Date: 2020-05-31 10:32:30
+ * @LastEditors: chunhua.yang
+ * @LastEditTime: 2020-05-31 16:45:31
+ */
 package gonginx
 
 import (
@@ -20,6 +27,12 @@ func (us *Upstream) GetName() string {
 //GetParameters upsrema parameters
 func (us *Upstream) GetParameters() []string {
 	return []string{us.UpstreamName} //the only parameter for an upstream is its name
+}
+
+//GetParameters upsrema parameters
+func (us *Upstream) SetDirectives(directives []IDirective) []IDirective {
+	return directives
+	//the only parameter for an upstream is its name
 }
 
 //GetBlock upstream does not have block

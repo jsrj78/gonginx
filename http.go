@@ -3,12 +3,13 @@
  * @Author: chunhua.yang
  * @Date: 2020-05-29 12:06:33
  * @LastEditors: chunhua.yang
- * @LastEditTime: 2020-05-31 00:25:50
+ * @LastEditTime: 2020-05-31 21:27:24
  */
 package gonginx
 
 import (
 	"errors"
+	"fmt"
 )
 
 //Http represents http block
@@ -21,9 +22,9 @@ type Http struct {
 
 //NewHttp create an http block from a directive which has a block
 func NewHttp(directive IDirective) (*Http, error) {
-	parameters := directive.GetParameters()
+	//parameters := directive.GetParameters()
 	http := &Http{
-		HttpName: parameters[0], //first parameter of the directive is the upstream name
+		HttpName: "http", //first parameter of the directive is the upstream name
 	}
 
 	block := directive.GetBlock()
@@ -32,13 +33,17 @@ func NewHttp(directive IDirective) (*Http, error) {
 	}
 
 	if len(directive.GetBlock().GetDirectives()) > 0 {
+
 		for _, d := range directive.GetBlock().GetDirectives() {
 			if d.GetName() == "server" {
 				s, _ := NewServer(d)
-				http.Servers = append(http.Servers,s)
+				http.Servers = append(http.Servers, s)
 			}
 		}
 	}
+
+	fmt.Println("==========", len(http.Servers))
+	http.Block = directive.GetBlock()
 
 	// return &Http{
 	// 	Block: block,
@@ -62,18 +67,37 @@ func (h *Http) GetBlock() IBlock {
 	return h.Block
 }
 
+func (h *Http) SetBlock(block IBlock) IBlock {
+	h.Block = block
+	return h.Block
+}
+
 func (h *Http) GetDirectives() []IDirective {
 	directives := make([]IDirective, 0)
-	directives = append(directives, h.Directives...)
-	for _, ss := range h.Servers {
-		directives = append(directives, ss)
-	}
+
+	directives = append(directives, h.Block.GetDirectives()...)
 
 	return directives
 }
 
 func (h *Http) AddServer(server *Server) {
-	h.Servers = append(h.Servers, server)
+	//directives := make([]IDirective, 0)
+	//directives = append(directives, server.Block.GetDirectives()...)
+	//fmt.Println(len(directives))
+
+	//h.Directives = append(h.Directives, directives...)
+	//得到所有的节点
+	directives := h.GetBlock().GetDirectives()
+	//新增server块节点
+	directive := &Directive{
+		Name:       "server",
+		Parameters: make([]string, 0),
+		Block:      server.Block,
+	}
+	directives = append(directives, directive)
+
+	var block = &Block{Directives: directives}
+	h.SetBlock(block)
 }
 
 func (h *Http) FindDirectives(directiveName string) []IDirective {

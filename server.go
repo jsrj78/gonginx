@@ -3,7 +3,7 @@
  * @Author: chunhua.yang
  * @Date: 2020-05-29 12:06:33
  * @LastEditors: chunhua.yang
- * @LastEditTime: 2020-05-31 00:10:37
+ * @LastEditTime: 2020-05-31 15:42:39
  */
 package gonginx
 
@@ -13,7 +13,8 @@ import (
 
 //Server represents server block
 type Server struct {
-	Block IBlock
+	Block      IBlock
+	Directives []IDirective
 }
 
 //NewServer create a server block from a directive with block
@@ -51,4 +52,28 @@ func (s *Server) GetDirective() *Directive {
 	}
 
 	return directive
+}
+
+func (s *Server) GetDirectives() []IDirective {
+	directives := make([]IDirective, 0)
+	directives = append(directives, s.Directives...)
+	// for _, ss := range s.Servers {
+	// 	directives = append(directives, ss)
+	// }
+
+	return directives
+}
+
+func (s *Server) FindDirectives(directiveName string) []IDirective {
+	directives := make([]IDirective, 0)
+	for _, directive := range s.Directives {
+		if directive.GetName() == directiveName {
+			directives = append(directives, directive)
+		}
+		if directive.GetBlock() != nil {
+			directives = append(directives, directive.GetBlock().FindDirectives(directiveName)...)
+		}
+	}
+
+	return directives
 }

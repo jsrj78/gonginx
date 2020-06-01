@@ -3,7 +3,7 @@
  * @Author: chunhua.yang
  * @Date: 2020-05-29 12:06:33
  * @LastEditors: chunhua.yang
- * @LastEditTime: 2020-05-31 00:38:46
+ * @LastEditTime: 2020-05-31 15:24:26
  */
 package gonginx
 
@@ -63,10 +63,13 @@ func (c *Config) FindUpstreams() []*Upstream {
 
 func (c *Config) FindHttp() *Http {
 
-	http := c.Block.FindDirectives("http")[0]
-	// for _, directive := range directives {
-	// 	//	up, _ := NewUpstream(directive)
-	// 	upstreams = append(upstreams, directive.(*Upstream))
-	// }
-	return http.(*Http)
+	http := c.Block.FindDirectives("http")[0].(*Http)
+
+	directives := c.Block.FindDirectives("server")
+	for _, directive := range directives {
+		//	up, _ := NewUpstream(directive)
+		http.Servers = append(http.Servers, directive.(*Server))
+	}
+
+	return http
 }
